@@ -5,6 +5,12 @@ springfoxdocumentation:
       
 server:
   port: 8080
+
+petstore:
+  cosmosdb:
+    uri: ${COSMOS_URI:https://petstoreal.documents.azure.com:443/}
+    key: ${COSMOS_ACCESS_KEY:w3c4c0i9AQwd719tvMzcGHBP3jytBHn3LTHH1kUqxwThahV8fZ0sKWtpvJcQ8ExjNh35SGWRDXCEACDbgGKKwA==}
+    database: ${COSMOS_DB:petstore}
   
 spring:
   application:

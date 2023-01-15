@@ -1,58 +1,56 @@
 package io.swagger;
 
+//import com.chtrembl.petstore.order.api.CosmosConfiguration;
+
+import com.azure.spring.data.cosmos.repository.config.EnableCosmosRepositories;
+import com.chtrembl.petstore.order.model.ContainerEnvironment;
+import com.chtrembl.petstore.order.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cache.annotation.AnnotationCacheOperationSource;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.interceptor.CacheInterceptor;
-import org.springframework.cache.interceptor.CacheOperationSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.client.RestTemplate;
-
-import com.chtrembl.petstore.order.api.StoreApiCacheInterceptor;
-import com.chtrembl.petstore.order.model.ContainerEnvironment;
-
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = JmsAutoConfiguration.class)
 @EnableCaching
 @EnableSwagger2
-@ComponentScan(basePackages = { "io.swagger", "com.chtrembl.petstore.order.api", "io.swagger.configuration" })
+@ComponentScan(basePackages = { "io.swagger", "com.chtrembl.petstore.order", "io.swagger.configuration" })
+@EnableCosmosRepositories(basePackageClasses = {OrderRepository.class})
+//@EnableConfigurationProperties(CosmosConfiguration.class)
 public class Swagger2SpringBoot implements CommandLineRunner {
 	static final Logger log = LoggerFactory.getLogger(Swagger2SpringBoot.class);
 
-	@ConditionalOnProperty(value = "foobar")
+	/*@ConditionalOnProperty(value = "foobar")
 	@Bean
 	public JmsTemplate jmsTemplate() {
 		return new JmsTemplate();
-	}
+	}*/
 
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
 	}
 
-	@Bean
+	/*@Bean
 	public CacheOperationSource cacheOperationSource() {
 		return new AnnotationCacheOperationSource();
-	}
+	}*/
 
-	@Primary
+	/*@Primary
 	@Bean
 	public CacheInterceptor cacheInterceptor() {
 		CacheInterceptor interceptor = new StoreApiCacheInterceptor();
-		interceptor.setCacheOperationSources(cacheOperationSource());
+		//interceptor.setCacheOperationSources(cacheOperationSource());
 		return interceptor;
-	}
+	}*/
 
 	@Bean
 	public ContainerEnvironment containerEnvvironment() {

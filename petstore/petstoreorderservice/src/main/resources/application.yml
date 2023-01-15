@@ -11,11 +11,27 @@ petstore:
     product:
       url: ${PETSTOREPRODUCTSERVICE_URL:http://localhost:8082}
 
+
+
+    #    key: ${COSMOS_ACCESS_KEY:dw6MMqgefRggg6SBMe7dOQbngOfGLIfacFaLq7qYtdKaotsCzGzV3O2hrsY8N83t4vEdPTXHWxqBACDbtOEbcQ==}
+#    database: ${COSMOS_DB:petstore}
+
+
 spring:
   application:
     name: petstoreorderservice
   autoconfigure:
     exclude: com.azure.spring.autoconfigure.jms.ServiceBusJMSAutoConfiguration,org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration,com.azure.spring.autoconfigure.jms.NonPremiumServiceBusJMSAutoConfiguration,com.microsoft.azure.spring.autoconfigure.jms.ServiceBusJMSAutoConfiguration
+  cloud:
+    azure:
+      cosmos:
+        endpoint: ${COSMOS_URI:https://petstoreal.documents.azure.com:443/}
+        uri: ${COSMOS_URI:https://petstoreal.documents.azure.com:443/}
+        key: ${COSMOS_ACCESS_KEY:w3c4c0i9AQwd719tvMzcGHBP3jytBHn3LTHH1kUqxwThahV8fZ0sKWtpvJcQ8ExjNh35SGWRDXCEACDbgGKKwA==}
+        database: ${COSMOS_DB:petstore}
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   #jms:
     #servicebus:
       #connection-string: ${PETSTOREORDERSERVICE_EMAIL_TOPIC_CONNECTION_STRING}

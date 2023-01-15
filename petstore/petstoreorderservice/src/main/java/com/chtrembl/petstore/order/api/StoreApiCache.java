@@ -53,11 +53,11 @@ public class StoreApiCache {
 		this.objectMapper = objectMapper;
 	}
 
-	@Cacheable("orders")
+	/*@Cacheable("orders")
 	public Order getOrder(String id) {
 		log.info(String.format("PetStoreOrderService creating new order id:%s and caching it", id));
 		return new Order();
-	}
+	}*/
 
 	@Cacheable("orders")
 	public List<Product> getProducts() {

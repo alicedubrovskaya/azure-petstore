@@ -9,7 +9,25 @@ server:
 spring:
   application:
     name: petstorepetservice
-
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://172.17.0.2:5432/petstore}
+    username: ${DATASOURCE_USER:postgres}
+    password: ${DATASOURCE_PASSWORD:Strong123}
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: true
+    properties:
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: create
+  sql:
+    init:
+      mode: always
 #azure:
 #    application-insights:
 #      instrumentation-key: ${PETSTORESERVICES_AI_INSTRUMENTATION_KEY}
@@ -25,7 +43,8 @@ management:
   endpoint:
     httptrace:
       enabled: true
-    
+
+
 data:
   pets:
     - id: 1
@@ -400,3 +419,8 @@ data:
         - id: 2
           name: "small"
       status: "available"
+
+
+#    url: jdbc:postgresql://petstore-postgresql-server-al.postgres.database.azure.com:5432/petstore
+#    username: petstoreureuser@petstore-postgresql-server-al
+#    password: Strong123

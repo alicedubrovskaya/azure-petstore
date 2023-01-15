@@ -1,22 +1,18 @@
 package com.chtrembl.petstore.order.model;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Serializable;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 
 import javax.annotation.PostConstruct;
 
+import com.google.common.io.CharStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.applicationinsights.core.dependencies.google.common.io.CharStreams;
 
 import ch.qos.logback.core.joran.spi.JoranException;
 
@@ -45,6 +41,7 @@ public class ContainerEnvironment implements Serializable {
 			String text = null;
 			try (final Reader reader = new InputStreamReader(resourcee)) {
 				text = CharStreams.toString(reader);
+				//text = reader.
 			}
 
 			Version version = objectMapper.readValue(text, Version.class);
