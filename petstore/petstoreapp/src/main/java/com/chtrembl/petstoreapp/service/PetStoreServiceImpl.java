@@ -3,26 +3,6 @@ package com.chtrembl.petstoreapp.service;
 /**
  * Implementation for service calls to the APIM/AKS
  */
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-
-import io.netty.resolver.DefaultAddressResolverGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
 
 import com.chtrembl.petstoreapp.model.Category;
 import com.chtrembl.petstoreapp.model.ContainerEnvironment;
@@ -35,9 +15,24 @@ import com.chtrembl.petstoreapp.model.WebRequest;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Mono;
-import reactor.netty.http.client.HttpClient;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Component
 public class PetStoreServiceImpl implements PetStoreService {
@@ -55,6 +50,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 	private WebClient petServiceWebClient = null;
 	private WebClient productServiceWebClient = null;
 	private WebClient orderServiceWebClient = null;
+	private WebClient orderReserverLambdaClient = null;
 
 	@PostConstruct
 	public void initialize() {
@@ -65,6 +61,8 @@ public class PetStoreServiceImpl implements PetStoreService {
 				.baseUrl(this.containerEnvironment.getPetStoreProductServiceURL()).build();
 		this.orderServiceWebClient = WebClient.builder().baseUrl(this.containerEnvironment.getPetStoreOrderServiceURL())
 				.build();
+		this.orderReserverLambdaClient = WebClient.builder().baseUrl(this.containerEnvironment.getOrderReserverLambda())
+			.build();
 	}
 
 	@Override
@@ -239,6 +237,13 @@ public class PetStoreServiceImpl implements PetStoreService {
 					//.header("Ocp-Apim-Trace", "true")
 					.retrieve()
 					.bodyToMono(Order.class).block();
+			this.orderReserverLambdaClient.post().uri("/api/orders")
+				.body(BodyInserters.fromPublisher(Mono.just(orderJSON), String.class))
+				.accept(MediaType.APPLICATION_JSON)
+				.headers(consumer)
+				.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+				.retrieve()
+				.bodyToMono(Order.class).block();
 
 		} catch (Exception e) {
 			logger.warn(e.getMessage());

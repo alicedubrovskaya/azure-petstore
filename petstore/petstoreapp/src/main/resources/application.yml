@@ -13,6 +13,8 @@ petstore:
       url: ${PETSTOREPRODUCTSERVICE_URL:http://localhost:8082}
     order:
       url: ${PETSTOREORDERSERVICE_URL:http://localhost:8083}
+    orderReserverLambda:
+      url: ${ORDER_RESERVER_LAMBDA_URL:http://localhost:7071}
     #subscription:
     #  key: ${PETSTORESERVICE_SUBSCRIPTION_KEY}
   #apim:

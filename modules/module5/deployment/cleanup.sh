@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
 
-source $(dirname "$0")/parameters.sh
+source ../../module3/deployment/parameters.sh
 
 az group delete --name $rgName
