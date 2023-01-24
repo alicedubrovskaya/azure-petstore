@@ -18,8 +18,8 @@ public class PetstoreappApplication {
 		try {
 			InetAddress address = InetAddress.getByName("www.google.com");
 			logger.info("GOOGLE: " + address.getHostAddress());
-			InetAddress address2 = InetAddress.getByName("petshoppetservice-us.azurewebsites.net");
-			logger.info("AZURE: " + address2.getHostAddress());
+			/*InetAddress address2 = InetAddress.getByName("petshoppetservice-us.azurewebsites.net");
+			logger.info("AZURE: " + address2.getHostAddress());*/
 		} catch (UnknownHostException e) {
 			throw new RuntimeException(e);
 		}

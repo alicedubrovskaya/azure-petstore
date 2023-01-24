@@ -9,7 +9,9 @@ server:
 spring:
   application:
     name: petstorepetservice
-
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 #azure:
 #    application-insights:
 #      instrumentation-key: ${PETSTORESERVICES_AI_INSTRUMENTATION_KEY}

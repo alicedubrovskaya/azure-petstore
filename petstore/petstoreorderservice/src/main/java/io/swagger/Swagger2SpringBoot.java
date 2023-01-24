@@ -1,5 +1,6 @@
 package io.swagger;
 
+import com.chtrembl.petstore.order.model.ContainerEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -8,19 +9,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cache.annotation.AnnotationCacheOperationSource;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.interceptor.CacheInterceptor;
-import org.springframework.cache.interceptor.CacheOperationSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.client.RestTemplate;
-
-import com.chtrembl.petstore.order.api.StoreApiCacheInterceptor;
-import com.chtrembl.petstore.order.model.ContainerEnvironment;
-
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
@@ -39,19 +32,6 @@ public class Swagger2SpringBoot implements CommandLineRunner {
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
-	}
-
-	@Bean
-	public CacheOperationSource cacheOperationSource() {
-		return new AnnotationCacheOperationSource();
-	}
-
-	@Primary
-	@Bean
-	public CacheInterceptor cacheInterceptor() {
-		CacheInterceptor interceptor = new StoreApiCacheInterceptor();
-		interceptor.setCacheOperationSources(cacheOperationSource());
-		return interceptor;
 	}
 
 	@Bean
