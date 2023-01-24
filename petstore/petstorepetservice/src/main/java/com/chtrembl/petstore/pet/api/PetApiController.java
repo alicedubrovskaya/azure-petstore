@@ -8,6 +8,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.chtrembl.petstore.pet.repository.PetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -49,11 +50,11 @@ public class PetApiController implements PetApi {
 	private ContainerEnvironment containerEnvironment;
 
 	@Autowired
-	private DataPreload dataPreload;
+	private PetRepository petRepository;
 
 	@Override
-	public DataPreload getBeanToBeAutowired() {
-		return dataPreload;
+	public PetRepository getBeanToBeAutowired() {
+		return petRepository;
 	}
 
 	@org.springframework.beans.factory.annotation.Autowired

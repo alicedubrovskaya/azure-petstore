@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -20,12 +21,16 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2021-12-20T15:31:39.272-05:00")
-
+@Entity
 public class Pet {
 	@JsonProperty("id")
+	@Id
+	@GeneratedValue(strategy= GenerationType.AUTO)
 	private Long id;
 
 	@JsonProperty("category")
+	@ManyToOne
+	@JoinColumn(name="category_id", nullable=false)
 	private Category category;
 
 	@JsonProperty("name")
@@ -37,6 +42,12 @@ public class Pet {
 
 	@JsonProperty("tags")
 	@Valid
+	@ManyToMany
+	@JoinTable(
+			name = "pettags",
+			joinColumns = { @JoinColumn(name = "pet_id") },
+			inverseJoinColumns = { @JoinColumn(name = "tag_id") }
+	)
 	private List<Tag> tags = null;
 
 	/**
@@ -86,7 +97,7 @@ public class Pet {
 
 	/**
 	 * Get id
-	 * 
+	 *
 	 * @return id
 	 */
 	@ApiModelProperty(value = "")
@@ -106,7 +117,7 @@ public class Pet {
 
 	/**
 	 * Get category
-	 * 
+	 *
 	 * @return category
 	 */
 	@ApiModelProperty(value = "")
@@ -128,7 +139,7 @@ public class Pet {
 
 	/**
 	 * Get name
-	 * 
+	 *
 	 * @return name
 	 */
 	@ApiModelProperty(example = "doggie", required = true, value = "")
@@ -144,7 +155,7 @@ public class Pet {
 
 	/**
 	 * Get photoUrls
-	 * 
+	 *
 	 * @return photoUrls
 	 */
 	@ApiModelProperty(required = true, value = "")
@@ -173,7 +184,7 @@ public class Pet {
 
 	/**
 	 * Get tags
-	 * 
+	 *
 	 * @return tags
 	 */
 	@ApiModelProperty(value = "")
@@ -195,7 +206,7 @@ public class Pet {
 
 	/**
 	 * pet status in the store
-	 * 
+	 *
 	 * @return status
 	 */
 	@ApiModelProperty(value = "pet status in the store")
