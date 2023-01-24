@@ -1,4 +1,4 @@
-# Module 7: Key Vault
+# Module 10: Authentication
 ## Self-study materials
 
 *Please, study the following materials:*
@@ -24,7 +24,9 @@
 
 Configure PetStore App to use Azure B2C for user authentication.
 
-Definition of done:
+![PetStore with Azure B2C](CloudXJavaAzureDev-module10.png)
+
+### Definition of done:
 
 1. Azure B2C identity provider has been configured
 2. PetStore App service uses configured Identity provider

@@ -35,7 +35,10 @@ You have PetStore application which allows the customers to add products to shop
 But for now, you don't have any system to send the requests to the warehouse in order to reserve the selected items.
 As a key developer, you should add a new service called OrderItemsReserver (as Azure Function) that generates an order request and upload it to Blob Storage. 
 Communication between PetStore application and the new service should be implemented in the simplest way: HTTP call.
-A solution should cover the next requirements:
+
+![PetStore with Reservation](CloudXJavaAzureDev-module5.png)
+
+### A solution should cover the next requirements:
 
 Each time when customer (same session) update shopping cart, order request file has to be uploaded to storage with order details and product list (file should be overwritten for user session).
 

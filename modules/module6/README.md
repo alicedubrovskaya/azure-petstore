@@ -47,6 +47,8 @@ Definition of done:
 2. The database is chosen and created
 3. After the customer creates an order, the new record appears in the CosmosDB Database. 
 
+![PetStore with Persistent Storage](CloudXJavaAzureDev-module6.png)
+
 ## Clean up:
 Resources left running can cost you money. You can delete resources individually or delete the resource group to delete the entire set of resources.
 ### Definition of done:
