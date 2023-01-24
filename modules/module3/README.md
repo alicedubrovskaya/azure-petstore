@@ -26,7 +26,8 @@ Please, complete the following task:
 - Public API Services should be configured to auto-scale based on CPU load increase.
 - Web project deployment should be available using deployment slots.
 
-(***TODO***: Add Link to the PetStore repository)
+![PetStore Diagram](CloudXJavaAzureDev-module3.png)
+
 [PetStore source code](https://git.epam.com/anton_lytunenko/cloudx-java-azure-dev/-/tree/main).
 
 ### Definition of done:
