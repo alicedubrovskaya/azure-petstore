@@ -12,6 +12,7 @@
 - [What is guest user access in Azure Active Directory B2B?](https://docs.microsoft.com/en-us/azure/active-directory/external-identities/what-is-b2b) (~3 min)
 - [Configure your App Service or Azure Functions app to use Azure AD login](https://docs.microsoft.com/en-gb/azure/app-service/configure-authentication-provider-aad) (~10 min)
 - [Authenticate and authorize users end-to-end in Azure App Service](https://docs.microsoft.com/en-gb/azure/app-service/tutorial-auth-aad?pivots=platform-windows) (~15 min)
+- [Add sign-in with Azure Active Directory B2C to a Spring web app](https://learn.microsoft.com/en-us/azure/developer/java/spring-framework/configure-spring-boot-starter-java-app-with-azure-active-directory-b2c-oidc) (~20 min)
 
 ### Recommended:
 - [What is Azure Active Directory?](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis) (~9 min)
@@ -29,8 +30,10 @@ Configure PetStore App to use Azure B2C for user authentication.
 ### Definition of done:
 
 1. Azure B2C identity provider has been configured
-2. PetStore App service uses configured Identity provider
-3. PetStore App user can login via Azure B2C  
+2. PetStore App has been registered as an Application in Azure B2C
+3. PetStore App Application has been configured with User Flows
+4. PetStore App Service configuration has been configured to use Azure B2C
+5. PetStore App user can login via Azure B2C
 
 ## Clean up:
 Resources left running can cost you money. You can delete resources individually or delete the resource group to delete the entire set of resources.
