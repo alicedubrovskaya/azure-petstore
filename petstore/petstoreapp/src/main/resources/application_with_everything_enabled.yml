@@ -15,8 +15,6 @@ petstore:
       url: ${PETSTOREORDERSERVICE_URL}
     subscription:
       key: ${PETSTORESERVICES_SUBSCRIPTION_KEY}
-    orderReserverLambda:
-      url: ${ORDER_RESERVER_URL:http://localhost:7071}
   apim:
     host: ${PETSTORE_APIM_HOST}
   logging:
