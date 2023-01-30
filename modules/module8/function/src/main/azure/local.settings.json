@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "java",
+    "FUNCTIONS_EXTENSION_VERSION": "~4",
+    "MAIN_CLASS":"com.epam.FunctionsApplication",
+    "AzureWebJobsDashboard": "",
+    "AzureServiceBusConnection": "Endpoint=sb://petstore-namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=YAIqS0A9OdKepUeCDwVXAFwlZt1zcmPu6v5uSXgBUVE="
+  }
+}

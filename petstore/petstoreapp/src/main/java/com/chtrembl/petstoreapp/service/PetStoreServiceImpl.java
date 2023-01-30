@@ -237,13 +237,6 @@ public class PetStoreServiceImpl implements PetStoreService {
 					//.header("Ocp-Apim-Trace", "true")
 					.retrieve()
 					.bodyToMono(Order.class).block();
-			this.orderReserverLambdaClient.post().uri("/api/orders")
-				.body(BodyInserters.fromPublisher(Mono.just(orderJSON), String.class))
-				.accept(MediaType.APPLICATION_JSON)
-				.headers(consumer)
-				.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-				.retrieve()
-				.bodyToMono(Order.class).block();
 
 		} catch (Exception e) {
 			logger.warn(e.getMessage());

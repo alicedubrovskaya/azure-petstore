@@ -15,3 +15,15 @@ az storage container create \
    --account-name $storageName \
    --name shopping-cart \
    --auth-mode login
+
+az servicebus namespace create \
+  --resource-group $rgName \
+  --name petstore-namespace \
+  --location $location \
+  --sku Standard
+
+az servicebus queue create \
+  --resource-group $rgName \
+  --namespace-name petstore-namespace \
+  --name order-queue \
+  --max-delivery-count 3
