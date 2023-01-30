@@ -61,3 +61,8 @@ spring:
     cache: false
   cache:
     cache-names: currentUsers
+  jms:
+    servicebus:
+      order-queue-name: ${ORDER_RESERVER_QUEUE_NAME:order-queue}
+      connection-string: ${ORDER_RESERVER_QUEUE_CONNECTION:test}
+      pricing-tier: Standard

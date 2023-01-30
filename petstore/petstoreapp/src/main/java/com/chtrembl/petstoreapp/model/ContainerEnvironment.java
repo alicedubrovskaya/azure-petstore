@@ -94,6 +94,9 @@ public class ContainerEnvironment implements Serializable {
 	@Value("${petstore.signalr.key:}")
 	private String signalRKey;
 
+	@Value("${spring.jms.servicebus.order-queue-name}")
+	private String orderQueueName;
+
 	private WebClient signalRWebClient = null;
 
 	public static String CURRENT_USERS_HUB = "currentUsers";
@@ -163,6 +166,10 @@ public class ContainerEnvironment implements Serializable {
 		}
 
 		return builder.compact();
+	}
+
+	public String getOrderQueueName() {
+		return orderQueueName;
 	}
 
 	public String getContainerHostName() {

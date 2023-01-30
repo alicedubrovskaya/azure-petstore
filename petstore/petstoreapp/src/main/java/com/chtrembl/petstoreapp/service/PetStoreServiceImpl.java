@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -46,6 +47,9 @@ public class PetStoreServiceImpl implements PetStoreService {
 
 	@Autowired
 	private WebRequest webRequest;
+
+	@Autowired
+	private JmsTemplate serviceBus;
 
 	private WebClient petServiceWebClient = null;
 	private WebClient productServiceWebClient = null;
@@ -234,6 +238,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 					//.header("Ocp-Apim-Trace", "true")
 					.retrieve()
 					.bodyToMono(Order.class).block();
+			serviceBus.convertAndSend(containerEnvironment.getOrderQueueName(), updatedOrder);
 
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
