@@ -52,6 +52,8 @@
 2. You have found the error logs using “Failures” tab in Application Insights
 3. You have checked the metrics updated to App Service on Metrics tab 
 
+![PetStore with AppInsights](CloudXJavaAzureDev-module4.png)
+
 ## Clean up:
 Resources left running can cost you money. You can delete resources individually or delete the resource group to delete the entire set of resources.
 ### Definition of done:

@@ -1,9 +1,0 @@
-spring:
-  cloud:
-    azure:
-      storage:
-        blob:
-          account-name: ${ACCOUNT_NAME:test}
-          account-key: ${ACCOUNT_KEY:test}
-          endpoint: https://${ACCOUNT_NAME:test}.blob.core.windows.net/
-          container-name: shopping-cart
