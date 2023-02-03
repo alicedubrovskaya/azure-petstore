@@ -1,39 +1,35 @@
 package com.chtrembl.petstoreapp.service;
 
-import javax.annotation.PostConstruct;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
-
 import com.chtrembl.petstoreapp.model.ContainerEnvironment;
 import com.chtrembl.petstoreapp.model.SearchResponse;
-import com.chtrembl.petstoreapp.model.User;
 import com.chtrembl.petstoreapp.model.Value;
 import com.chtrembl.petstoreapp.model.WebPages;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 
-@Component
+import javax.annotation.PostConstruct;
+
+@Service
 public class SearchServiceImpl implements SearchService {
-	private static Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);
 
 	final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			false);
 
-	@Autowired
-	private User sessionUser;
-
-	@Autowired
-	private ContainerEnvironment containerEnvironment;
+	private final ContainerEnvironment containerEnvironment;
 
 	private WebClient bingSearchWebClient = null;
+
+	public SearchServiceImpl(ContainerEnvironment containerEnvironment) {
+		this.containerEnvironment = containerEnvironment;
+	}
 
 	@PostConstruct
 	public void initialize() {
@@ -43,7 +39,7 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	public WebPages bingSearch(String query) {
-		Exception e = null;
+		Exception e;
 
 		try {
 			String response = this.bingSearchWebClient.get().uri("v7.0/search?q=" + query)
@@ -56,14 +52,9 @@ public class SearchServiceImpl implements SearchService {
 			SearchResponse searchResponse = this.objectMapper.readValue(response, SearchResponse.class);
 			return searchResponse.getWebPages();
 
-		} catch (WebClientException wce) {
+		} catch (WebClientException | IllegalArgumentException | JsonProcessingException wce) {
 			e = wce;
-		} catch (IllegalArgumentException iae) {
-			e = iae;
-		} catch (JsonMappingException jme) {
-			e = jme;
-		} catch (JsonProcessingException jpe) {
-			e = jpe;
+			logger.error("Error", e);
 		}
 		WebPages webpages = new WebPages();
 		webpages.value = new Value[1];

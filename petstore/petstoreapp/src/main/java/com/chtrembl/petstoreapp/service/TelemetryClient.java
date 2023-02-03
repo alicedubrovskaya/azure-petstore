@@ -1,11 +1,5 @@
 package com.chtrembl.petstoreapp.service;
 
-import java.util.Date;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.microsoft.applicationinsights.telemetry.Duration;
 import com.microsoft.applicationinsights.telemetry.EventTelemetry;
 import com.microsoft.applicationinsights.telemetry.ExceptionTelemetry;
@@ -17,13 +11,18 @@ import com.microsoft.applicationinsights.telemetry.SessionState;
 import com.microsoft.applicationinsights.telemetry.SeverityLevel;
 import com.microsoft.applicationinsights.telemetry.Telemetry;
 import com.microsoft.applicationinsights.telemetry.TraceTelemetry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Stub for overriding during Unit Testing. (Should really live in Test package)
  */
 public class TelemetryClient extends com.microsoft.applicationinsights.TelemetryClient {
-	private static String message = "azure.application-insights.instrumentation-key not found, considering configuring Application Inisghts if you would like to track Telemtry.";
-	private static Logger logger = LoggerFactory.getLogger(TelemetryClient.class);
+	private static final String message = "azure.application-insights.instrumentation-key not found, considering configuring Application Inisghts if you would like to track Telemtry.";
+	private static final Logger logger = LoggerFactory.getLogger(TelemetryClient.class);
 
 	@Override
 	public void track(Telemetry arg0) {

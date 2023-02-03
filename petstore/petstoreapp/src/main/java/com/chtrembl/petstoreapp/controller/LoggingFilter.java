@@ -27,11 +27,14 @@ import com.chtrembl.petstoreapp.model.WebRequest;
 @Order(1)
 public class LoggingFilter implements Filter {
 
-	@Autowired
-	private ContainerEnvironment containerEnvironment;
+	private final ContainerEnvironment containerEnvironment;
 
-	@Autowired
-	private WebRequest webRequest;
+	private final WebRequest webRequest;
+
+	public LoggingFilter(ContainerEnvironment containerEnvironment, WebRequest webRequest) {
+		this.containerEnvironment = containerEnvironment;
+		this.webRequest = webRequest;
+	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

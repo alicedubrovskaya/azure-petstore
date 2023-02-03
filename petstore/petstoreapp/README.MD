@@ -12,10 +12,6 @@ Run the Docker Image. Note this example instructs Spring Boot to run on any port
 
 Other optional aruments that you can specify to do certain things that get covered in the Azure Pet Store Reference Guide(s) like:
 
-- enable Application Inisghts (empty and disabled by default, you'll want to uncomment the property in azure-cloud\petstore\petstoreapp\src\main\resources\application.yml
-
-```-e PETSTORESERVICES_AI_INSTRUMENTATION_KEY=<your key here>```
-
 - enable APIM Management and pass along a subscription key in the REST calls (empty and disabled by default, you'll want to uncomment the property in azure-cloud\petstore\petstoreapp\src\main\resources\application.yml
 
 ```-e PETSTORESERVICE_SUBSCRIPTION_KEY=<your key here>```

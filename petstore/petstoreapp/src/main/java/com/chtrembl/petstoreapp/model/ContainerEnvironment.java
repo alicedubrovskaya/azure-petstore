@@ -1,21 +1,10 @@
 package com.chtrembl.petstoreapp.model;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
-
+import ch.qos.logback.core.joran.spi.JoranException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,15 +19,19 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.applicationinsights.core.dependencies.google.common.io.CharStreams;
-
-import ch.qos.logback.core.joran.spi.JoranException;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import reactor.core.publisher.Mono;
+
+import javax.annotation.PostConstruct;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Singleton to store container state
@@ -119,13 +112,7 @@ public class ContainerEnvironment implements Serializable {
 
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			InputStream resourcee = new ClassPathResource("static/content/version.json").getInputStream();
-			String text = null;
-			try (final Reader reader = new InputStreamReader(resourcee)) {
-				text = CharStreams.toString(reader);
-			}
-
-			Version version = objectMapper.readValue(text, Version.class);
+			Version version = objectMapper.readValue(new ClassPathResource("version.json").getFile(), Version.class);
 			this.setAppVersion(version.getVersion());
 			this.setAppDate(version.getDate());
 		} catch (IOException e) {
