@@ -126,10 +126,6 @@ public class PetStoreServiceImpl implements PetStoreService {
 	public Collection<Product> getProducts(String category, List<Tag> tags) {
 		List<Product> products = new ArrayList<Product>();
 
-		this.sessionUser.getTelemetryClient()
-				.trackEvent(String.format(
-						"PetStoreApp user %s is requesting to retrieve products from the PetStoreProductService",
-						this.sessionUser.getName()), this.sessionUser.getCustomEventProperties(), null);
 		try {
 			Consumer<HttpHeaders> consumer = it -> it.addAll(this.webRequest.getHeaders());
 			products = this.productServiceWebClient.get()
@@ -165,10 +161,6 @@ public class PetStoreServiceImpl implements PetStoreService {
 		} catch (
 
 		WebClientException wce) {
-			this.sessionUser.getTelemetryClient().trackException(wce);
-			this.sessionUser.getTelemetryClient().trackEvent(
-					String.format("PetStoreApp %s received %s, container host: %s", this.sessionUser.getName(),
-							wce.getMessage(), this.containerEnvironment.getContainerHostName()));
 			// little hack to visually show the error message within our Azure Pet Store
 			// Reference Guide (Academic Tutorial)
 			Product product = new Product();
