@@ -14,8 +14,6 @@ petstore:
 spring:
   application:
     name: petstoreorderservice
-  autoconfigure:
-    exclude: com.azure.spring.autoconfigure.jms.ServiceBusJMSAutoConfiguration,org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration,com.azure.spring.autoconfigure.jms.NonPremiumServiceBusJMSAutoConfiguration,com.microsoft.azure.spring.autoconfigure.jms.ServiceBusJMSAutoConfiguration
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

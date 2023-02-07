@@ -12,7 +12,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -22,12 +21,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = { "io.swagger", "com.chtrembl.petstore.order.api", "io.swagger.configuration" })
 public class Swagger2SpringBoot implements CommandLineRunner {
 	static final Logger log = LoggerFactory.getLogger(Swagger2SpringBoot.class);
-
-	@ConditionalOnProperty(value = "foobar")
-	@Bean
-	public JmsTemplate jmsTemplate() {
-		return new JmsTemplate();
-	}
 
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
