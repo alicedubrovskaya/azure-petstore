@@ -1,24 +1,17 @@
 package com.chtrembl.petstore.pet.model;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Calendar;
-
-import javax.annotation.PostConstruct;
-
+import ch.qos.logback.core.joran.spi.JoranException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.applicationinsights.core.dependencies.google.common.io.CharStreams;
-
-import ch.qos.logback.core.joran.spi.JoranException;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Calendar;
 
 @SuppressWarnings("serial")
 public class ContainerEnvironment implements Serializable {
@@ -40,13 +33,7 @@ public class ContainerEnvironment implements Serializable {
 
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			InputStream resourcee = new ClassPathResource("version.json").getInputStream();
-			String text = null;
-			try (final Reader reader = new InputStreamReader(resourcee)) {
-				text = CharStreams.toString(reader);
-			}
-
-			Version version = objectMapper.readValue(text, Version.class);
+			Version version = objectMapper.readValue(new ClassPathResource("version.json").getFile(), Version.class);
 			this.setAppVersion(version.getVersion());
 			this.setAppDate(version.getDate());
 		} catch (IOException e) {

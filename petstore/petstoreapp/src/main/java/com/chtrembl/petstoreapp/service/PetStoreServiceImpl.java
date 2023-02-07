@@ -17,11 +17,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -34,22 +34,23 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class PetStoreServiceImpl implements PetStoreService {
-	private static Logger logger = LoggerFactory.getLogger(PetStoreServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(PetStoreServiceImpl.class);
 
-	@Autowired
-	private User sessionUser;
-
-	@Autowired
-	private ContainerEnvironment containerEnvironment;
-
-	@Autowired
-	private WebRequest webRequest;
+	private final User sessionUser;
+	private final ContainerEnvironment containerEnvironment;
+	private final WebRequest webRequest;
 
 	private WebClient petServiceWebClient = null;
 	private WebClient productServiceWebClient = null;
 	private WebClient orderServiceWebClient = null;
+
+	public PetStoreServiceImpl(User sessionUser, ContainerEnvironment containerEnvironment, WebRequest webRequest) {
+		this.sessionUser = sessionUser;
+		this.containerEnvironment = containerEnvironment;
+		this.webRequest = webRequest;
+	}
 
 	@PostConstruct
 	public void initialize() {
@@ -64,7 +65,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 
 	@Override
 	public Collection<Pet> getPets(String category) {
-		List<Pet> pets = new ArrayList<Pet>();
+		List<Pet> pets = new ArrayList<>();
 
 		this.sessionUser.getTelemetryClient().trackEvent(
 				String.format("PetStoreApp user %s is requesting to retrieve pets from the PetStorePetService",
@@ -76,11 +77,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 					.accept(MediaType.APPLICATION_JSON)
 					.headers(consumer)
 					.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-					//.header("host", this.containerEnvironment.getPetstoreAPIMHost())
-					//.header("session-id", this.sessionUser.getSessionId())
-					//.header("Ocp-Apim-Subscription-Key", this.containerEnvironment.getPetStoreServicesSubscriptionKey())
 					.header("Cache-Control", "no-cache")
-					//.header("Ocp-Apim-Trace", "true")
 					.retrieve()
 					.bodyToMono(new ParameterizedTypeReference<List<Pet>>() {
 					}).block();
@@ -100,8 +97,6 @@ public class PetStoreServiceImpl implements PetStoreService {
 			this.sessionUser.getTelemetryClient().trackEvent(
 					String.format("PetStoreApp %s received %s, container host: %s", this.sessionUser.getName(),
 							wce.getMessage(), this.containerEnvironment.getContainerHostName()));
-			// little hack to visually show the error message within our Azure Pet Store
-			// Reference Guide (Academic Tutorial)
 			Pet pet = new Pet();
 			pet.setName(wce.getMessage());
 			pet.setPhotoURL("");
@@ -124,7 +119,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 
 	@Override
 	public Collection<Product> getProducts(String category, List<Tag> tags) {
-		List<Product> products = new ArrayList<Product>();
+		List<Product> products = new ArrayList<>();
 
 		try {
 			Consumer<HttpHeaders> consumer = it -> it.addAll(this.webRequest.getHeaders());
@@ -133,11 +128,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 					.accept(MediaType.APPLICATION_JSON)
 					.headers(consumer)
 					.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-					//.header("host", this.containerEnvironment.getPetstoreAPIMHost())
-					//.header("session-id", this.sessionUser.getSessionId())
-					//.header("Ocp-Apim-Subscription-Key", this.containerEnvironment.getPetStoreServicesSubscriptionKey())
 					.header("Cache-Control", "no-cache")
-					//.header("Ocp-Apim-Trace", "true")
 					.retrieve()
 					.bodyToMono(new ParameterizedTypeReference<List<Product>>() {
 					}).block();
@@ -213,17 +204,13 @@ public class PetStoreServiceImpl implements PetStoreService {
 					.configure(SerializationFeature.FAIL_ON_SELF_REFERENCES, false).writeValueAsString(updatedOrder);
 
 			Consumer<HttpHeaders> consumer = it -> it.addAll(this.webRequest.getHeaders());
-			
+
 			updatedOrder = this.orderServiceWebClient.post().uri("petstoreorderservice/v2/store/order")
 					.body(BodyInserters.fromPublisher(Mono.just(orderJSON), String.class))
 					.accept(MediaType.APPLICATION_JSON)
 					.headers(consumer)
 					.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-					//.header("host", this.containerEnvironment.getPetstoreAPIMHost())
-					//.header("session-id", this.sessionUser.getSessionId())
-					//.header("Ocp-Apim-Subscription-Key", this.containerEnvironment.getPetStoreServicesSubscriptionKey())
 					.header("Cache-Control", "no-cache")
-					//.header("Ocp-Apim-Trace", "true")
 					.retrieve()
 					.bodyToMono(Order.class).block();
 
@@ -242,25 +229,19 @@ public class PetStoreServiceImpl implements PetStoreService {
 		Order order = null;
 		try {
 			Consumer<HttpHeaders> consumer = it -> it.addAll(this.webRequest.getHeaders());
-			
+
 			order = this.orderServiceWebClient.get()
 					.uri(uriBuilder -> uriBuilder.path("petstoreorderservice/v2/store/order/{orderId}").build(orderId))
 					.accept(MediaType.APPLICATION_JSON)
 					.headers(consumer)
 					.header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-					//.header("host", "azurepetstoreapim.azure-api.net")
-					//.header("session-id", this.sessionUser.getSessionId())
-					//.header("Ocp-Apim-Subscription-Key", this.containerEnvironment.getPetStoreServicesSubscriptionKey())
 					.header("Cache-Control", "no-cache")
-					//.header("Ocp-Apim-Trace", "true")
 					.retrieve()
 					.bodyToMono(new ParameterizedTypeReference<Order>() {
 					}).block();
-
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
 		}
-
 		return order;
 	}
 

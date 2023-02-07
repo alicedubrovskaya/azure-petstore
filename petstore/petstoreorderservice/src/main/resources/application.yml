@@ -14,20 +14,9 @@ petstore:
 spring:
   application:
     name: petstoreorderservice
-  autoconfigure:
-    exclude: com.azure.spring.autoconfigure.jms.ServiceBusJMSAutoConfiguration,org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration,com.azure.spring.autoconfigure.jms.NonPremiumServiceBusJMSAutoConfiguration,com.microsoft.azure.spring.autoconfigure.jms.ServiceBusJMSAutoConfiguration
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  #jms:
-    #servicebus:
-      #connection-string: ${PETSTOREORDERSERVICE_EMAIL_TOPIC_CONNECTION_STRING}
-      #pricing-tier: Standard
-      #topic-client-id: ${PETSTOREORDERSERVICE_SUBSCRIPTION_ID}  
-
-#azure:
-#    application-insights:
-#      instrumentation-key: ${PETSTORESERVICES_AI_INSTRUMENTATION_KEY}
 
 management:
   endpoints:
