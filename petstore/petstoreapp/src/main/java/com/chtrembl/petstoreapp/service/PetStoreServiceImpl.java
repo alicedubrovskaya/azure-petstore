@@ -153,6 +153,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 				products = products.stream().filter(product -> category.equals(product.getCategory().getName())
 						&& product.getTags().toString().contains("small")).collect(Collectors.toList());
 			}
+			logger.info("The number of items that are returned: " + products.size());
 			return products;
 		} catch (
 
