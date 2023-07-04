@@ -5,7 +5,14 @@ springfoxdocumentation:
       
 server:
   port: ${PETSTOREPRODUCTSERVICE_SERVER_PORT:8080}
-  
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+
 spring:
   application:
     name: petstoreproductservice
@@ -13,6 +20,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: create
     defer-datasource-initialization: true
@@ -20,9 +30,9 @@ spring:
     init:
       mode: always
   datasource:
-    url: jdbc:postgresql://localhost:5432/petstoreproductservice_db
-    username: postgres
-    password: pass
+    url: jdbc:postgresql://alisapetstoredb.postgres.database.azure.com:5432/petstoreproductservice_db?sslmode=require
+    username: admin_alisa
+    password: Password1
 
 management:
   endpoints:
