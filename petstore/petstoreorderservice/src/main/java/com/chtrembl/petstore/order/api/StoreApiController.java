@@ -1,5 +1,8 @@
 package com.chtrembl.petstore.order.api;
 
+import com.azure.messaging.servicebus.ServiceBusClientBuilder;
+import com.azure.messaging.servicebus.ServiceBusMessage;
+import com.azure.messaging.servicebus.ServiceBusSenderClient;
 import com.chtrembl.petstore.order.model.ContainerEnvironment;
 import com.chtrembl.petstore.order.model.Order;
 import com.chtrembl.petstore.order.model.Product;
@@ -35,6 +38,9 @@ import java.util.Map;
 public class StoreApiController implements StoreApi {
 
 	static final Logger log = LoggerFactory.getLogger(StoreApiController.class);
+
+	private static String SERVICE_BUS_CONNECTION_STRING = "Endpoint=sb://alisapetstoresb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XIplvOrr1Oh/K5VlndLngxCvqqBijGNzn+ASbHPIXZk=";
+	private static String SERVICE_BUS_QUEUE_NAME = "queue";
 
 	private final ObjectMapper objectMapper;
 
@@ -166,6 +172,14 @@ public class StoreApiController implements StoreApi {
 				String orderJSON = new ObjectMapper().writeValueAsString(order);
 
 				ApiUtil.setResponse(request, "application/json", orderJSON);
+
+				ServiceBusSenderClient senderClient = new ServiceBusClientBuilder()
+						.connectionString(SERVICE_BUS_CONNECTION_STRING)
+						.sender()
+						.queueName(SERVICE_BUS_QUEUE_NAME)
+						.buildClient();
+				senderClient.sendMessage(new ServiceBusMessage(orderJSON));
+
 				return new ResponseEntity<>(HttpStatus.OK);
 			} catch (IOException e) {
 				log.error("Couldn't serialize response for content type application/json", e);

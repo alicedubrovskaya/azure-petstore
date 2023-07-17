@@ -96,6 +96,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.azure</groupId>
+			<artifactId>azure-messaging-servicebus</artifactId>
+			<version>7.13.3</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>applicationinsights-logging-logback</artifactId>
 			<version>2.6.1</version>
