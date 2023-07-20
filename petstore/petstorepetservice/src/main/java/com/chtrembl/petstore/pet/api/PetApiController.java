@@ -8,6 +8,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.chtrembl.petstore.pet.repository.PetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -44,6 +45,9 @@ public class PetApiController implements PetApi {
 	private final ObjectMapper objectMapper;
 
 	private final NativeWebRequest request;
+
+	@Autowired
+	PetRepository petRepository;
 
 	@Autowired
 	private ContainerEnvironment containerEnvironment;
@@ -100,7 +104,9 @@ public class PetApiController implements PetApi {
 					"PetStorePetService incoming GET request to petstorepetservice/v2/pet/findPetsByStatus?status=%s",
 					status));
 			try {
-				String petsJSON = new ObjectMapper().writeValueAsString(this.getPreloadedPets());
+				List<Pet> pets = petRepository.findAll();
+				String petsJSON = new ObjectMapper().writeValueAsString(pets);
+//				String petsJSON = new ObjectMapper().writeValueAsString(this.getPreloadedPets());
 				ApiUtil.setResponse(request, "application/json", petsJSON);
 				return new ResponseEntity<>(HttpStatus.OK);
 			} catch (JsonProcessingException e) {

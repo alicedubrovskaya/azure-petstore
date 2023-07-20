@@ -18,6 +18,13 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  cloud:
+    azure:
+      cosmos:
+        endpoint: https://petstorecosmos.documents.azure.com:443/
+        database: petstoreorderservice_db
+        populate-query-metrics: true
+
 management:
   endpoints:
     web:
