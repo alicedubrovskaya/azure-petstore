@@ -15,6 +15,7 @@ import com.chtrembl.petstoreapp.model.WebRequest;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.microsoft.applicationinsights.TelemetryClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,9 +29,7 @@ import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -139,6 +138,12 @@ public class PetStoreServiceImpl implements PetStoreService {
 			// world production scenario)
 			this.sessionUser.setProducts(products);
 
+			TelemetryClient telemetryClient = sessionUser.getTelemetryClient();
+			Map<String, String> mapMetric = new HashMap<>();
+			mapMetric.put("user", sessionUser.getName());
+			mapMetric.put("session", sessionUser.getSessionId());
+			telemetryClient.trackMetric("MetricSession", 1, 1, 1.0, 1.0, 1.0, mapMetric);
+
 			// filter this specific request per category
 			if (tags.stream().anyMatch(t -> t.getName().equals("large"))) {
 				products = products.stream().filter(product -> category.equals(product.getCategory().getName())
@@ -148,6 +153,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 				products = products.stream().filter(product -> category.equals(product.getCategory().getName())
 						&& product.getTags().toString().contains("small")).collect(Collectors.toList());
 			}
+			logger.info("The number of items that are returned: " + products.size());
 			return products;
 		} catch (
 
