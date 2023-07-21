@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +42,10 @@ public class StoreApiController implements StoreApi {
 
 	static final Logger log = LoggerFactory.getLogger(StoreApiController.class);
 
-	private static String SERVICE_BUS_CONNECTION_STRING = "Endpoint=sb://alisapetstoresb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XIplvOrr1Oh/K5VlndLngxCvqqBijGNzn+ASbHPIXZk=";
-	private static String SERVICE_BUS_QUEUE_NAME = "queue";
+	@Value("${servicebus.connection-string}")
+	private String serviceBusConnectionString;
+	@Value("${servicebus.queue.name}")
+	private String serviceBusQueueName;
 
 	private final ObjectMapper objectMapper;
 
@@ -137,9 +140,6 @@ public class StoreApiController implements StoreApi {
 				orderRepository.save(order);
 			}
 
-//			this.storeApiCache.getOrder(body.getId()).setId(body.getId());
-//			this.storeApiCache.getOrder(body.getId()).setEmail(body.getEmail());
-//			this.storeApiCache.getOrder(body.getId()).setComplete(body.isComplete());
 
 			// 1 product is just an add from a product page so cache needs to be updated
 			if (body.getProducts() != null && body.getProducts().size() == 1) {
@@ -204,9 +204,9 @@ public class StoreApiController implements StoreApi {
 				ApiUtil.setResponse(request, "application/json", orderJSON);
 
 				ServiceBusSenderClient senderClient = new ServiceBusClientBuilder()
-						.connectionString(SERVICE_BUS_CONNECTION_STRING)
+						.connectionString(serviceBusConnectionString)
 						.sender()
-						.queueName(SERVICE_BUS_QUEUE_NAME)
+						.queueName(serviceBusQueueName)
 						.buildClient();
 				senderClient.sendMessage(new ServiceBusMessage(orderJSON));
 

@@ -105,7 +105,6 @@ public class ProductApiController implements ProductApi {
 					"PetStoreProductService incoming GET request to petstoreproductservice/v2/pet/findProductsByStatus?status=%s",
 					status));
 			try {
-//				String productsJSON = new ObjectMapper().writeValueAsString(this.getPreloadedProducts());
 				String productsJSON = new ObjectMapper().writeValueAsString(productRepository.findAll());
 				ApiUtil.setResponse(request, "application/json", productsJSON);
 				return new ResponseEntity<>(HttpStatus.OK);

@@ -39,3 +39,17 @@ spring:
     cache: false
   cache:
     cache-names: currentUsers
+
+azure:
+  activedirectory:
+    b2c:
+      tenant: alisapetstore
+      oidc-enabled: true
+      client-id: ${CLIENT_ID:3f2a8758-0e8f-441d-93f3-5cf02871111d}
+      client-secret: ${CLIENT_SECRET:'mOr8Q~K1CsaakoBLehdAyordkeUiflKFXr1gBbZE'}
+      reply-url: https://alisapetstoreapp.azurewebsites.net/login
+      logout-success-url: https://alisapetstoreapp.azurewebsites.net/logout
+      user-flows:
+        sign-up-or-sign-in: B2C_1_signupsignin
+        profile-edit: B2C_1_profileediting
+        password-reset: B2C_1_passwordreset

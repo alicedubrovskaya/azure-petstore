@@ -6,6 +6,7 @@ import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
+import org.springframework.beans.factory.annotation.Value;
 
 
 import java.io.FileWriter;
@@ -23,8 +24,12 @@ public class ServiceBusQueueTriggerJava {
      * This function will be invoked when a new message is received at the Service Bus Queue.
      */
 
-    private static final String BLOB_CONTAINER_CONNECTION_STRING = "efaultEndpointsProtocol=https;AccountName=alisapetstoresa;AccountKey=BbdrjaDJJ4iW9b37+PztMmYvehQYqXwM7NteFkPgvwZ12cObAbiOj0ymeQ5sKDuvZjMXe7B0ufQU+AStjM44Tw==;EndpointSuffix=core.windows.net";
-    private static final String BLOB_CONTAINER_NAME = "alisacontainer";
+    @Value("${container.connection-string}")
+    private String blobContainerConnectionString;
+    @Value("${container.name}")
+    private String blobContainerName;
+    @Value("${email.uri}")
+    private String uriEmail;
 
     @FunctionName("ServiceBusQueueTriggerJava")
     public void run(
@@ -54,10 +59,10 @@ public class ServiceBusQueueTriggerJava {
 
     public void processMessage(String message, ExecutionContext context) {
         BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                .connectionString(BLOB_CONTAINER_CONNECTION_STRING)
+                .connectionString(blobContainerConnectionString)
                 .buildClient();
 
-        BlobContainerClient blobContainerClient = blobServiceClient.getBlobContainerClient(BLOB_CONTAINER_NAME);
+        BlobContainerClient blobContainerClient = blobServiceClient.getBlobContainerClient(blobContainerName);
         if (!blobContainerClient.exists()) {
             blobContainerClient.create();
         }
@@ -81,7 +86,7 @@ public class ServiceBusQueueTriggerJava {
     public void sendRequest(String message, ExecutionContext context) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://alisalogicapp.azurewebsites.net:443/api/orderEmail/triggers/When_a_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=hnp9P2cy6DRWDn_ZFvWADPiTX0ERrZIva05u0OjF7GY"))
+                .uri(URI.create(uriEmail))
                 .POST(HttpRequest.BodyPublishers.ofString(message))
                 .build();
         try {
